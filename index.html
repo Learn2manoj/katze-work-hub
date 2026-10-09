@@ -21,7 +21,6 @@
       --text-muted: #9CA3AF;
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
       --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
     }
     * {
       box-sizing: border-box;
@@ -328,15 +327,15 @@
     <article class="app-card">
       <div class="app-icon" aria-hidden="true">📚</div>
       <div class="details">
-        <h2>Katze intranet Links</h2>
-        <p>Katze intranet</p>
+        <h2>Employee Routine Links</h2>
+        <p>Katze intranet and employee resources</p>
       </div>
       <a class="open" href="https://sites.google.com/katzeindia.com/katzeintranet/routine-employee-links" target="_blank" rel="noopener noreferrer">Open ↗</a>
     </article>
     <article class="app-card">
       <div class="app-icon" aria-hidden="true">📊</div>
       <div class="details">
-        <h2>Work INDIA Dashboard</h2>
+        <h2>Work Dashboard</h2>
         <p>Main work application</p>
       </div>
       <a class="open" href="http://3.6.125.26/dashboard" target="_blank" rel="noopener noreferrer">Open ↗</a>
@@ -350,16 +349,33 @@
       <a class="open" href="http://3.6.125.26/jobcart/login" target="_blank" rel="noopener noreferrer">Open ↗</a>
     </article>
   </section>
+
+  <section class="checklist" aria-labelledby="check-title">
+    <h2 id="check-title">Daily check-off</h2>
+    <p class="hint">Tick each one after you finish checking it.</p>
+    <label class="check"><input type="checkbox" data-check="0"><span>Checked Employee Routine Links</span></label>
+    <label class="check"><input type="checkbox" data-check="1"><span>Checked Work Dashboard</span></label>
+    <label class="check"><input type="checkbox" data-check="2"><span>Checked Job Cart</span></label>
+    <div class="progress-wrap" aria-hidden="true"><div id="progress"></div></div>
+    <div class="progress-text"><span id="progress-label">0 of 3 completed</span><span id="progress-percent">0%</span></div>
+    <button class="reset" id="reset" type="button">Reset checklist</button>
+  </section>
+
   <footer>Shortcut hub only. Your work websites open separately and handle their own sign-in.<br>Checklist ticks stay on this device for this browser.</footer>
 </main>
 
 <script>
+  // Initialize checklist references
   const checks = [...document.querySelectorAll('[data-check]')];
   const progress = document.getElementById('progress');
   const label = document.getElementById('progress-label');
   const percent = document.getElementById('progress-percent');
+  const resetBtn = document.getElementById('reset');
+  const installButton = document.getElementById('install-app');
+  const installHelp = document.getElementById('install-help');
 
-  function render() {
+  // Helper: update progress bar and completion status
+  function updateProgress() {
     const done = checks.filter(c => c.checked).length;
     const pct = Math.round(done / checks.length * 100);
     progress.style.width = pct + '%';
@@ -368,33 +384,53 @@
     checks.forEach(c => c.closest('.check').classList.toggle('done', c.checked));
   }
 
-  checks.forEach(c => c.addEventListener('change', render));
-  document.getElementById('reset').addEventListener('click', () => {
-    checks.forEach(c => c.checked = false);
-    render();
+  // Helper: save checklist to localStorage
+  function saveChecklist() {
+    const today = new Date().toLocaleDateString('en-CA');
+    try {
+      localStorage.setItem('katze-work-hub', JSON.stringify({
+        date: today,
+        checked: checks.map(x => x.checked)
+      }));
+    } catch(e) {
+      console.warn('localStorage unavailable:', e);
+    }
+  }
+
+  // Helper: restore checklist from localStorage
+  function restoreChecklist() {
+    const today = new Date().toLocaleDateString('en-CA');
+    try {
+      const saved = JSON.parse(localStorage.getItem('katze-work-hub') || '{}');
+      if (saved.date === today && Array.isArray(saved.checked)) {
+        checks.forEach((c, i) => c.checked = !!saved.checked[i]);
+      }
+    } catch(e) {
+      console.warn('localStorage restore failed:', e);
+    }
+  }
+
+  // Restore checklist on page load
+  restoreChecklist();
+  updateProgress();
+
+  // Single save handler for all checkbox changes
+  checks.forEach(c => {
+    c.addEventListener('change', () => {
+      updateProgress();
+      saveChecklist();
+    });
   });
 
-  // Automatically clear the daily checklist when the local date changes.
-  const today = new Date().toLocaleDateString('en-CA');
-  try {
-    const saved = JSON.parse(localStorage.getItem('katze-work-hub') || '{}');
-    if (saved.date === today && Array.isArray(saved.checked)) {
-      checks.forEach((c, i) => c.checked = !!saved.checked[i]);
-    }
-    checks.forEach(c => c.addEventListener('change', () => {
-      localStorage.setItem('katze-work-hub', JSON.stringify({date: today, checked: checks.map(x => x.checked)}));
-    }));
-    document.getElementById('reset').addEventListener('click', () => {
-      localStorage.setItem('katze-work-hub', JSON.stringify({date: today, checked: checks.map(x => x.checked)}));
-    });
-  } catch(e) {}
+  // Reset button: clear all checks and save
+  resetBtn.addEventListener('click', () => {
+    checks.forEach(c => c.checked = false);
+    updateProgress();
+    saveChecklist();
+  });
 
-  render();
-
-  // Show the native PWA install prompt when the browser supports it.
+  // PWA install prompt handling
   let installPrompt = null;
-  const installButton = document.getElementById('install-app');
-  const installHelp = document.getElementById('install-help');
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
   if (isStandalone) {
@@ -416,7 +452,7 @@
       installPrompt = null;
       return;
     }
-    installHelp.textContent = 'To install: open this page in Chrome, tap ⋮, then choose "Install app" or "Install and create shortcut". If you do not see that option, the dashboard must be opened over HTTPS (https://).';
+    installHelp.textContent = 'To install: open this page in Chrome, tap ⋮, then choose "Install app" or "Install and create shortcut". If you do not see that option, the dashboard must be opened over HTTPS.';
   });
 
   window.addEventListener('appinstalled', () => {
@@ -427,7 +463,9 @@
 
   // Register service worker for offline support
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-    navigator.serviceWorker.register('/katze-work-hub/sw.js').catch(() => {});
+    navigator.serviceWorker.register('/katze-work-hub/sw.js').catch(() => {
+      console.warn('Service worker registration failed');
+    });
   }
 </script>
 </body>

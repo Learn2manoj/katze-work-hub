@@ -5,14 +5,14 @@ const FILES = [
   BASE_PATH + '/index.html',
   BASE_PATH + '/manifest.webmanifest',
   BASE_PATH + '/icon.svg',
-  BASE_PATH + '/assets/katze-logo.png'
+  BASE_PATH + '/icon-192.png',
+  BASE_PATH + '/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE).then(cache => {
       return cache.addAll(FILES).catch(() => {
-        // Gracefully handle missing files
         return Promise.all(FILES.map(file =>
           cache.add(file).catch(() => {
             console.warn('Could not cache:', file);
@@ -36,17 +36,14 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   
-  // Only handle same-origin requests
   if (url.origin !== self.location.origin) {
     return;
   }
   
-  // Cache-first strategy for static assets
   if (url.pathname.startsWith(BASE_PATH)) {
     event.respondWith(
       caches.match(event.request).then(cached => {
         return cached || fetch(event.request).then(response => {
-          // Cache successful responses
           if (response.ok) {
             const cache_copy = response.clone();
             caches.open(CACHE).then(cache => {
@@ -55,7 +52,6 @@ self.addEventListener('fetch', event => {
           }
           return response;
         }).catch(() => {
-          // Return cached version if offline
           return caches.match(event.request);
         });
       })
