@@ -1,25 +1,25 @@
 {
   "name": "Katze Work Hub",
   "short_name": "Katze Hub",
-  "description": "Quick access to three Katze work websites",
-  "start_url": "./index.html",
+  "description": "Mobile dashboard for daily work applications",
+  "start_url": "/katze-work-hub/index.html",
   "display": "standalone",
-  "background_color": "#0b1120",
-  "theme_color": "#111827",
+  "background_color": "#FFFFFF",
+  "theme_color": "#0066CC",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/katze-work-hub/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "/katze-work-hub/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "scope": "./",
+  "scope": "/katze-work-hub/",
   "prefer_related_applications": false
 }

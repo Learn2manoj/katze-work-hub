@@ -3,74 +3,354 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#111827">
-  <meta name="description" content="A mobile-friendly shortcut hub for Katze work websites.">
+  <meta name="theme-color" content="#0066CC">
+  <meta name="description" content="Katze Work Hub: Mobile dashboard for daily work applications">
   <title>Katze Work Hub</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/katze-work-hub/manifest.webmanifest">
+  <link rel="icon" href="/katze-work-hub/icon.svg" type="image/svg+xml">
   <style>
-    :root { color-scheme: dark; --bg:#0b1120; --panel:#151f32; --muted:#a8b4c8; --line:#29364c; --accent:#93c5fd; }
-    * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; background:radial-gradient(ellipse at top,#1a2a45 0,#0b1120 55%); color:#f8fafc; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    main { width:min(100%,520px); margin:0 auto; padding:calc(24px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom)); }
-    header { display:flex; align-items:center; gap:13px; margin:8px 0 26px; }
-    .logo { width:54px; height:54px; border-radius:17px; display:grid; place-items:center; background:linear-gradient(145deg,#2563eb,#0f172a); border:1px solid #48658e; font-weight:850; letter-spacing:-1px; font-size:20px; }
-    h1 { margin:0; font-size:25px; letter-spacing:-.6px; }
-    .subtitle { margin:4px 0 0; color:var(--muted); font-size:14px; }
-    .install-area { display:grid; gap:8px; margin:0 0 24px; }
-    .install-btn { width:100%; min-height:48px; border:0; border-radius:14px; padding:12px 16px; background:#60a5fa; color:#0b1120; font:700 15px system-ui,sans-serif; cursor:pointer; }
-    .install-help { margin:0; color:var(--muted); font-size:12px; line-height:1.5; }
-    .section-label { margin:0 0 12px 3px; color:#cbd5e1; font-size:12px; text-transform:uppercase; letter-spacing:1.5px; font-weight:700; }
-    .cards { display:grid; gap:13px; }
-    .app-card { display:flex; align-items:center; gap:14px; padding:17px; border:1px solid var(--line); background:rgba(21,31,50,.94); border-radius:19px; box-shadow:0 8px 24px #00000018; }
-    .app-icon { width:50px; height:50px; flex:0 0 50px; display:grid; place-items:center; border-radius:15px; background:#25354d; font-size:24px; }
-    .details { min-width:0; flex:1; }
-    .details h2 { font-size:16px; margin:0 0 5px; }
-    .details p { color:var(--muted); font-size:12px; margin:0; line-height:1.4; }
-    .open { display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:0 13px; text-decoration:none; border-radius:12px; background:#dbeafe; color:#0f172a; font-weight:750; font-size:13px; white-space:nowrap; }
-    .open:focus-visible, .check input:focus-visible { outline:3px solid #93c5fd; outline-offset:3px; }
-    .checklist { margin-top:25px; padding:18px; border:1px solid var(--line); background:rgba(21,31,50,.85); border-radius:19px; }
-    .checklist h2 { margin:0 0 5px; font-size:17px; }
-    .hint { margin:0 0 15px; color:var(--muted); font-size:12px; }
-    .check { display:flex; align-items:center; gap:11px; padding:11px 0; border-top:1px solid #263349; font-size:14px; }
-    .check input { width:19px; height:19px; accent-color:#60a5fa; }
-    .check.done span { color:#9caec5; text-decoration:line-through; }
-    .progress-wrap { height:6px; background:#2b374b; border-radius:99px; overflow:hidden; margin-top:13px; }
-    #progress { height:100%; width:0%; background:#60a5fa; transition:width .2s; }
-    .progress-text { display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-top:8px; }
-    .reset { border:1px solid #42516a; color:#e2e8f0; background:transparent; padding:9px 12px; border-radius:10px; font:inherit; font-size:12px; margin-top:14px; }
-    footer { text-align:center; color:#8290a6; font-size:11px; line-height:1.6; padding:22px 10px 0; }
-    @media(max-width:370px) { .app-card { gap:10px; padding:13px; } .app-icon { width:42px; height:42px; flex-basis:42px; } .open { padding:0 10px; } h1 { font-size:22px; } }
+    :root {
+      --katze-blue: #0066CC;
+      --katze-blue-dark: #004FA3;
+      --katze-blue-light: #E6F0FF;
+      --bg: #FFFFFF;
+      --surface: #F8FAFB;
+      --border: #E5E7EB;
+      --text-primary: #1F2937;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+    }
+    main {
+      width: min(100%, 600px);
+      margin: 0 auto;
+      padding: calc(20px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0 0 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      width: 100px;
+      height: auto;
+      flex-shrink: 0;
+    }
+    .logo img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    .header-text h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    .install-area {
+      display: grid;
+      gap: 12px;
+      margin: 0 0 32px;
+    }
+    .install-btn {
+      width: 100%;
+      min-height: 48px;
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      background: var(--katze-blue);
+      color: white;
+      font: 600 16px inherit;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .install-btn:hover:not(:disabled) {
+      background: var(--katze-blue-dark);
+      box-shadow: var(--shadow-md);
+    }
+    .install-btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    .install-btn:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+    .install-btn:focus-visible {
+      outline: 2px solid var(--katze-blue);
+      outline-offset: 2px;
+    }
+    .install-help {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .section-label {
+      margin: 24px 0 16px;
+      color: var(--text-primary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+    .cards {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .app-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .app-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--katze-blue-light);
+    }
+    .app-icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--katze-blue-light);
+      font-size: 24px;
+    }
+    .details {
+      flex: 1;
+      min-width: 0;
+    }
+    .details h2 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 4px;
+      color: var(--text-primary);
+    }
+    .details p {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin: 0;
+      line-height: 1.4;
+    }
+    .open {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 12px;
+      text-decoration: none;
+      border-radius: 6px;
+      background: var(--katze-blue);
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    .open:hover {
+      background: var(--katze-blue-dark);
+    }
+    .open:focus-visible {
+      outline: 2px solid var(--katze-blue);
+      outline-offset: 2px;
+    }
+    .checklist {
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .checklist h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .hint {
+      margin: 0 0 16px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+    .check:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+    .check input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--katze-blue);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .check input:focus-visible {
+      outline: 2px solid var(--katze-blue);
+      outline-offset: 2px;
+    }
+    .check.done span {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .progress-wrap {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: var(--katze-blue);
+      transition: width 0.3s ease;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .reset {
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      background: transparent;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font: 600 13px inherit;
+      margin-top: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .reset:hover {
+      border-color: var(--katze-blue);
+      background: var(--katze-blue-light);
+      color: var(--katze-blue-dark);
+    }
+    .reset:focus-visible {
+      outline: 2px solid var(--katze-blue);
+      outline-offset: 2px;
+    }
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.6;
+      padding: 32px 10px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+    @media (max-width: 480px) {
+      main {
+        padding: calc(16px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+      }
+      header {
+        gap: 12px;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+      }
+      .logo {
+        width: 85px;
+      }
+      .header-text h1 {
+        font-size: 24px;
+      }
+      .app-card {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .open {
+        width: 100%;
+        margin-top: 8px;
+      }
+    }
   </style>
 </head>
 <body>
 <main>
   <header>
-    <div class="logo" aria-hidden="true">K</div>
-    <div><h1>Katze Work Hub</h1><p class="subtitle">Your daily work, in one place</p></div>
+    <div class="logo">
+      <img src="/katze-work-hub/assets/katze-logo.png" alt="KATZE Logo" width="120" height="56">
+    </div>
+    <div class="header-text">
+      <h1>Work Hub</h1>
+      <p class="subtitle">Your daily work, in one place</p>
+    </div>
   </header>
+
   <section class="install-area" aria-label="Install app">
     <button class="install-btn" id="install-app" type="button">＋ Install Katze Work Hub</button>
-    <p class="install-help" id="install-help">Install this dashboard on your phone for quick access. If the install button is unavailable, use your browser menu and choose “Install app” or “Add to Home screen”.</p>
+    <p class="install-help" id="install-help">Install this dashboard on your phone for quick access. If the install button is unavailable, use your browser menu and choose "Install app" or "Install and create shortcut".</p>
   </section>
+
   <p class="section-label">Work applications</p>
   <section class="cards" aria-label="Work application shortcuts">
     <article class="app-card">
       <div class="app-icon" aria-hidden="true">📚</div>
-      <div class="details"><h2>Employee Routine Links</h2><p>Katze intranet</p></div>
+      <div class="details">
+        <h2>Employee Routine Links</h2>
+        <p>Katze intranet and employee resources</p>
+      </div>
       <a class="open" href="https://sites.google.com/katzeindia.com/katzeintranet/routine-employee-links" target="_blank" rel="noopener noreferrer">Open ↗</a>
     </article>
     <article class="app-card">
       <div class="app-icon" aria-hidden="true">📊</div>
-      <div class="details"><h2>Work Dashboard</h2><p> work application</p></div>
+      <div class="details">
+        <h2>Work Dashboard</h2>
+        <p>Main work application</p>
+      </div>
       <a class="open" href="http://3.6.125.26/dashboard" target="_blank" rel="noopener noreferrer">Open ↗</a>
     </article>
     <article class="app-card">
       <div class="app-icon" aria-hidden="true">🗂️</div>
-      <div class="details"><h2>Job Cart</h2><p>Job cart login</p></div>
+      <div class="details">
+        <h2>Job Cart</h2>
+        <p>Job cart login</p>
+      </div>
       <a class="open" href="http://3.6.125.26/jobcart/login" target="_blank" rel="noopener noreferrer">Open ↗</a>
     </article>
   </section>
+
   <section class="checklist" aria-labelledby="check-title">
     <h2 id="check-title">Daily check-off</h2>
     <p class="hint">Tick each one after you finish checking it.</p>
@@ -81,46 +361,66 @@
     <div class="progress-text"><span id="progress-label">0 of 3 completed</span><span id="progress-percent">0%</span></div>
     <button class="reset" id="reset" type="button">Reset checklist</button>
   </section>
+
   <footer>Shortcut hub only. Your work websites open separately and handle their own sign-in.<br>Checklist ticks stay on this device for this browser.</footer>
 </main>
+
 <script>
   const checks = [...document.querySelectorAll('[data-check]')];
   const progress = document.getElementById('progress');
   const label = document.getElementById('progress-label');
   const percent = document.getElementById('progress-percent');
+
   function render() {
     const done = checks.filter(c => c.checked).length;
     const pct = Math.round(done / checks.length * 100);
-    progress.style.width = pct + '%'; label.textContent = `${done} of ${checks.length} completed`; percent.textContent = pct + '%';
+    progress.style.width = pct + '%';
+    label.textContent = `${done} of ${checks.length} completed`;
+    percent.textContent = pct + '%';
     checks.forEach(c => c.closest('.check').classList.toggle('done', c.checked));
   }
+
   checks.forEach(c => c.addEventListener('change', render));
-  document.getElementById('reset').addEventListener('click', () => { checks.forEach(c => c.checked = false); render(); });
+  document.getElementById('reset').addEventListener('click', () => {
+    checks.forEach(c => c.checked = false);
+    render();
+  });
+
   // Automatically clear the daily checklist when the local date changes.
   const today = new Date().toLocaleDateString('en-CA');
   try {
     const saved = JSON.parse(localStorage.getItem('katze-work-hub') || '{}');
-    if (saved.date === today && Array.isArray(saved.checked)) checks.forEach((c,i) => c.checked = !!saved.checked[i]);
-    checks.forEach(c => c.addEventListener('change', () => localStorage.setItem('katze-work-hub', JSON.stringify({date:today, checked:checks.map(x=>x.checked)}))));
-    document.getElementById('reset').addEventListener('click', () => localStorage.setItem('katze-work-hub', JSON.stringify({date:today, checked:checks.map(x=>x.checked)})));
+    if (saved.date === today && Array.isArray(saved.checked)) {
+      checks.forEach((c, i) => c.checked = !!saved.checked[i]);
+    }
+    checks.forEach(c => c.addEventListener('change', () => {
+      localStorage.setItem('katze-work-hub', JSON.stringify({date: today, checked: checks.map(x => x.checked)}));
+    }));
+    document.getElementById('reset').addEventListener('click', () => {
+      localStorage.setItem('katze-work-hub', JSON.stringify({date: today, checked: checks.map(x => x.checked)}));
+    });
   } catch(e) {}
+
   render();
+
   // Show the native PWA install prompt when the browser supports it.
   let installPrompt = null;
   const installButton = document.getElementById('install-app');
   const installHelp = document.getElementById('install-help');
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
   if (isStandalone) {
     installButton.textContent = '✓ Katze Work Hub is installed';
     installButton.disabled = true;
-    installButton.style.opacity = '.75';
     installHelp.textContent = 'You can open Katze Work Hub from your phone home screen.';
   }
+
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     installPrompt = event;
     installButton.hidden = false;
   });
+
   installButton.addEventListener('click', async () => {
     if (installPrompt) {
       installPrompt.prompt();
@@ -128,14 +428,19 @@
       installPrompt = null;
       return;
     }
-    installHelp.textContent = 'To install: open this page in Chrome, tap ⋮, then choose “Install app” or “Install and create shortcut”. If you do not see that option, the dashboard must be hosted on HTTPS first; opening index.html directly from a ZIP cannot install it as a PWA.';
+    installHelp.textContent = 'To install: open this page in Chrome, tap ⋮, then choose "Install app" or "Install and create shortcut". If you do not see that option, the dashboard must be opened over HTTPS (https://).';
   });
+
   window.addEventListener('appinstalled', () => {
     installButton.textContent = '✓ Katze Work Hub is installed';
     installButton.disabled = true;
     installHelp.textContent = 'You can open Katze Work Hub from your phone home screen.';
   });
-  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+  // Register service worker for offline support
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    navigator.serviceWorker.register('/katze-work-hub/sw.js').catch(() => {});
+  }
 </script>
 </body>
 </html>
