@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Katze Work Hub</title>
+  <meta name="description" content="Katze Work Hub: your daily work, in one place.">
+  <meta name="theme-color" content="#0B93DF">
+  <meta name="color-scheme" content="light">
+
+  <!-- All paths are relative so the app works under /katze-work-hub/ on GitHub Pages -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <!-- The supplied PNG includes a light-grey strip on its right edge; the wrapper crops it from view
+           without altering the original file or its proportions. -->
+      <div class="logo" role="img" aria-label="KATZE">
+        <img src="assets/katze-logo.png" width="322" height="63" alt="" decoding="async">
+      </div>
+      <div class="brand-text">
+        <h1>Work Hub</h1>
+        <p>Your daily work, in one place</p>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+
+    <section aria-labelledby="apps-heading">
+      <h2 id="apps-heading">Work applications</h2>
+      <ul class="app-grid">
+
+        <li class="card app-card">
+          <div class="app-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
+          </div>
+          <h3>Katze Intranet</h3>
+          <p>Katze intranet.</p>
+          <a class="btn" href="https://sites.google.com/katzeindia.com/katzeintranet/routine-employee-links" target="_blank" rel="noopener noreferrer">
+            Open<span class="sr-only"> Katze Intranet, opens in a new tab</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+          </a>
+        </li>
+
+        <li class="card app-card">
+          <div class="app-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+          </div>
+          <h3>WorkIndia Dashboard</h3>
+          <p>Main work application.</p>
+          <a class="btn" href="http://3.6.125.26/login" target="_blank" rel="noopener noreferrer">
+            Open<span class="sr-only"> WorkIndia Dashboard, opens in a new tab</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+          </a>
+        </li>
+
+        <li class="card app-card">
+          <div class="app-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+          </div>
+          <h3>Job Cart</h3>
+          <p>Job cart login.</p>
+          <a class="btn" href="http://3.6.125.26/jobcart/login" target="_blank" rel="noopener noreferrer">
+            Open<span class="sr-only"> Job Cart, opens in a new tab</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+          </a>
+        </li>
+
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Work Hub only opens your existing tools in new tabs. It never asks for or stores your work passwords.</p>
+  </footer>
+
+  <dialog id="reset-dialog" aria-labelledby="reset-title">
+    <h2 id="reset-title">Reset today's checklist?</h2>
+    <p>All items will be unchecked. This can't be undone.</p>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-secondary" id="reset-cancel" autofocus>Cancel</button>
+      <button type="button" class="btn" id="reset-confirm">Yes, reset</button>
+    </div>
+  </dialog>
+
+  <div class="update-banner" id="update-banner" role="status" hidden>
+    <span>A new version of Work Hub is ready.</span>
+    <button type="button" class="btn btn-small" id="update-btn">Reload</button>
+  </div>
+</body>
+</html>
